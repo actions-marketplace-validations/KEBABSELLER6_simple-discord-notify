@@ -14,6 +14,10 @@ Designed to replace bloated node.js actions with a simple, robust `curl` solutio
 - **Status Colors:** Visual feedback for success/failure/warnings.
 
 ---
+
+![image](sample.png)
+
+---
 <div align="center">
   <h3>Was this vibecoded?</h3>
   <p>Yes. Yes it was. ✨</p>
