@@ -1,0 +1,63 @@
+name: 'Simple Discord Notify'
+description: 'Send notifications to Discord via webhook with customizable embed layouts'
+author: 'kebabseller6'
+
+branding:
+  icon: 'bell'
+  color: 'purple'
+
+inputs:
+  webhook_url:
+    description: 'Discord webhook URL'
+    required: true
+
+  layout:
+    description: 'Notification layout: minimal, standard, detailed'
+    required: false
+    default: 'standard'
+
+  title:
+    description: 'Notification title'
+    required: false
+    default: 'GitHub Action Notification'
+
+  message:
+    description: 'Main message content'
+    required: false
+    default: ''
+
+  status:
+    description: 'Job status for auto-color: success, failure, cancelled (or use color input for manual override)'
+    required: false
+    default: ''
+
+  color:
+    description: 'Embed color (decimal). Overrides status-based color if set.'
+    required: false
+    default: ''
+
+  username:
+    description: 'Bot username override'
+    required: false
+    default: 'GitHub Actions'
+
+  avatar_url:
+    description: 'Bot avatar URL override'
+    required: false
+    default: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Send Discord Notification
+      shell: bash
+      env:
+        WEBHOOK_URL: ${{ inputs.webhook_url }}
+        LAYOUT: ${{ inputs.layout }}
+        TITLE: ${{ inputs.title }}
+        MESSAGE: ${{ inputs.message }}
+        STATUS: ${{ inputs.status }}
+        COLOR: ${{ inputs.color }}
+        USERNAME: ${{ inputs.username }}
+        AVATAR_URL: ${{ inputs.avatar_url }}
+      run: ${{ github.action_path }}/entrypoint.sh

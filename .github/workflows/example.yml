@@ -1,0 +1,71 @@
+name: Example Discord Notifications
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # Example: Minimal notification
+  notify-minimal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Minimal Notification
+        uses: ./
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          layout: minimal
+          title: "Build Started"
+          color: '3447003'
+
+  # Example: Standard notification (default)
+  notify-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Standard Notification
+        uses: ./
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          layout: standard
+          title: "Deployment Complete"
+          message: "The application has been successfully deployed to production."
+          status: success
+
+  # Example: Detailed notification with all context
+  notify-detailed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detailed Notification
+        uses: ./
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          layout: detailed
+          title: "Build Failed"
+          message: "The build process encountered errors. Please check the logs."
+          status: failure
+
+  # Example: Auto-color from job status
+  build-with-status:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Simulate Build
+        run: echo "Building..."
+
+      - name: Notify Result
+        if: always()
+        uses: ./
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          layout: standard
+          title: "Build ${{ job.status }}"
+          message: "Workflow completed for **${{ github.repository }}**"
+          status: ${{ job.status }}
